@@ -1,0 +1,14 @@
+ Configuration of the Raspberry Pi:
+1.	Configure ‘config.csv’ with:
+	a. FTP servers where it has to connect (up to 2)
+	b. Modbus addresses it has to connect to
+2. Execute 'python3 ftpPush.py' to make sure the software runs correctly
+3. If the does, configure cron to execute the file periodically:
+	a. Create folder logs (!)
+    b. Execute command:
+    	# 'crontab -e'. It will ask to create new file (press enter)
+    c. Add line to the file:
+        */15 * * * * /home/pi/dataCollecting/launcher.sh >/home/pi/dataCollecting/logs/cronlog.log
+
+        (The addresses should match the location of the files)
+4. The program should run every fifteen minutes after reboot. The output can be seen doing 'cat /home/pi/dataCollecting/logs/cronlog.log' 
