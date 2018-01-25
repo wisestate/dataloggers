@@ -29,8 +29,7 @@ def readValueIP(address, port, addr, reg):
     value = -1
     if not c.is_open():
         if not c.open():
-            print("Unable to connect to "+ip+":"+str(port))
-        c.close()
+            print("Unable to connect to "+address+":"+str(port))
     if c.is_open():
         try:
             value = c.read_holding_registers(int(addr), int(reg))
@@ -39,7 +38,7 @@ def readValueIP(address, port, addr, reg):
         finally:
             c.close()
     return value[0]
-    
+
 #Uploads files to FTP
 def csvManaging(ip, user, pwd, ftpServer):
     print("Trying to upload files...")
@@ -111,6 +110,7 @@ def valueManager():
 
         device = row[0]
         deviceType = row[1]
+        print('This device is ' +device + ' of type ' deviceType)
         if deviceType == 0:
             writeCSV(row[0], row[3], row[5], now)
         elif deviceType == 1:
