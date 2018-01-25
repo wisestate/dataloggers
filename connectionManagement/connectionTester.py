@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Dec 14 14:55:05 2017
-
 @author: Sebastià
 """
 

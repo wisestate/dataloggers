@@ -12,14 +12,46 @@ import datetime
 import csv
 import os
 from pymodbus.client.sync import ModbusSerialClient as ModbusClient
+from pyModbusTCP.client import ModbusIPClient
 
-
+#Reads Value via Modbus RTU
 def readValue(id, reg):
     rr = client.read_input_registers(address=int(reg), count = 1, unit=int(id))
     #print(rr.registers)
     return rr.registers[0]
 
+#Reads Value via Modbus RTU 
+def readValueIP(address, port, id, reg):
+    c = ModbusIPClient()
+    c.host(address)
+    c.port(port)
+    value = -1
+    if not c.is_open():
+        if not c.open():
+            print("Unable to connect to "+ip+":"+str(port))
+    else:
+        c.close()
+    if c.is_open():
+        try:
+            value = c.read_holding_registers(id, reg)
+        except Exception as e:
+            raise e
+        finally:
+            c.close()
+    return value
 
+#Special method for Sennet clients
+def isSennet()
+     if (int(row[2])==513):
+        scale = value
+        # print("New scale: " + scale)
+    else:
+        if (int(row[2]) == 515):
+            value = value*10**(scale-6)
+            # print(value)  
+
+            
+#Uploads 
 def csvManaging(ip, user, pwd, ftpServer):
     print("Trying to upload files...")
     with open('pendingFiles.csv') as csvfile:
@@ -133,17 +165,11 @@ with open('config.csv') as csvfile:
                 usr.append(row[2])
                 pwd.append(row[3])
                 #print(row)
+            elif row[1] == 3:
+                isSennet()
             else:
                 value = readValue(row[1], row[2])
-                # print(value)
-                if (int(row[2])==513):
-                    scale = value
-                   # print("New scale: " + scale)
-                else:
-                    if (int(row[2]) == 515):
-                        value = value*10**(scale-6)
-                        # print(value)  
-                    writeCSV(row[0], row[3], value, now)
+                writeCSV(row[0], row[3], value, now)
             
            
         rownum = rownum + 1

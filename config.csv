@@ -1,4 +1,5 @@
-"MeliaSerria","192.168.1.100","Sebastia","Password"
-"MeliaSerria","66.220.9.50","Sebastia","Password"
-"Lector 1",1,515,402
-"Lector 1",1,512,412
+"MeliaSerria",0,0,"192.168.1.100","Sebastia","Password"
+"Lector 1",1,0,0,1,513,402
+"Lector 1",1,0,0,1,514,402
+"Lector 1",1,0,0,1,515,402
+"PC 1",2,"192.168.1.1000",502,1,0,412

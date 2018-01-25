@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+"""
+@author: Sebastià
+"""
+
 from ftplib import FTP
 from time import time
 import datetime
