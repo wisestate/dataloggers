@@ -11,6 +11,7 @@ from time import gmtime, strftime, time, sleep
 import datetime
 import csv
 import os
+import pprint
 from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 from pyModbusTCP.client import ModbusIPClient
 
@@ -40,18 +41,7 @@ def readValueIP(address, port, id, reg):
             c.close()
     return value
 
-#Special method for Sennet clients
-def isSennet()
-     if (int(row[2])==513):
-        scale = value
-        # print("New scale: " + scale)
-    else:
-        if (int(row[2]) == 515):
-            value = value*10**(scale-6)
-            # print(value)  
-
-            
-#Uploads 
+#Uploads files to FTP
 def csvManaging(ip, user, pwd, ftpServer):
     print("Trying to upload files...")
     with open('pendingFiles.csv') as csvfile:
@@ -133,7 +123,7 @@ print(location)
 print("I'm located at " + startLocation())
 client = ModbusClient(method='rtu', port='/dev/ttyUSB0', timeout=1, stopbits = 1, bytesize = 8,  parity='N', baudrate= 9600)
 client.connect()
-
+pp = pprint.PrettyPrinter(indent=4)
 startime = time()
 print("\n")
 now = datetime.datetime.utcnow()
@@ -147,32 +137,37 @@ with open('config.csv') as csvfile:
     usr = []
     pwd = []
     scale = 1
+    values 
     for row in readCSV:
         if not row:
             break
         if rownum == 0:
             header = row
             location = row[0]
-            ip.append(row[1])
-            usr.append(row[2])
-            pwd.append(row[3])
+            ip.append(row[3])
+            usr.append(row[4])
+            pwd.append(row[5])
             fileName = location +'-'+ dateName + '.csv'
             print("Filename: " + fileName)
             #print(row)
         else:
             if row[0] == location:
-                ip.append(row[1])
-                usr.append(row[2])
-                pwd.append(row[3])
+                ip.append(row[3])
+                usr.append(row[4])
+                pwd.append(row[5])
                 #print(row)
-            elif row[1] == 3:
-                isSennet()
             else:
-                value = readValue(row[1], row[2])
-                writeCSV(row[0], row[3], value, now)
+                #Read RTU
+                if row[0] < 10:
+                    value = readValue(row[4], row[5])
+                elif:
+                    value = readValueIP(row[2], row[3], row[4], row[5])
+                values.append([row[0], row[1], row[4], row[5], row[6], value])
             
            
         rownum = rownum + 1
+
+    pp.print(values)
 
 
 storeFile(dateName)
