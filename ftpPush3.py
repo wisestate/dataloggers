@@ -109,11 +109,12 @@ def valueManager():
             linesSkipped = 0
 
         device = row[0]
-        deviceType = row[1]
-        print('This device is ' +device + ' of type ' deviceType)
+        deviceType = int(row[1])
+        print('This device is ' +device + ' of type ' + deviceType)
         if deviceType == 0:
             writeCSV(row[0], row[3], row[5], now)
-        elif deviceType == 1:
+        #Sennet
+        elif deviceType == 2:
             scale = row[5]
             linesToSkip = 2
             lowRow = values[rownum+1]
@@ -122,8 +123,15 @@ def valueManager():
             high = highRow[5]
             value = ((65536*high)+low)*10**(scale-6)
             writeCSV(row[0], row[3], value, now)
+        #Dexcell
+        elif deviceType == 1:
+            value = row[5]/1000
+            writeCSV(row[0], row[3], value, now)
         elif deviceType == 10:
             writeCSV(row[0], row[3], row[5], now)
+        elif deviceType == 11
+            value = row[5]/5
+            writeCSV(row[0], row[3], value, now)
         else:
             writeCSV(row[0], row[3], row[5], now)
 
