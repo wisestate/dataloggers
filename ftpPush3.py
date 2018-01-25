@@ -22,25 +22,24 @@ def readValue(id, reg):
     return rr.registers[0]
 
 #Reads Value via Modbus RTU 
-def readValueIP(address, port, id, reg):
+def readValueIP(address, port, addr, reg):
     c = ModbusIPClient()
     c.host(address)
-    c.port(port)
+    c.port(int(port))
     value = -1
     if not c.is_open():
         if not c.open():
             print("Unable to connect to "+ip+":"+str(port))
-    else:
         c.close()
     if c.is_open():
         try:
-            value = c.read_holding_registers(int(id), reg)
+            value = c.read_holding_registers(int(addr), int(reg))
         except Exception as e:
             raise e
         finally:
             c.close()
-    return value
-
+    return value[0]
+    
 #Uploads files to FTP
 def csvManaging(ip, user, pwd, ftpServer):
     print("Trying to upload files...")
@@ -95,13 +94,14 @@ def csvManaging(ip, user, pwd, ftpServer):
 
 
 
-def valueManager()
+def valueManager():
     rownum = 0
     lastDevice = "Null"
     high = 0
     low = 0
     scale = 1
     linesToSkip = 0
+    linesSkipped = 0
     for row in values:
         if linesSkipped < linesToSkip :
             linesSkipped += 1
@@ -206,7 +206,7 @@ with open('config.csv') as csvfile:
            
         rownum = rownum + 1
 
-    pp.print(values)
+    pp.pprint(values)
 
 valueManager()
 storeFile(dateName)
