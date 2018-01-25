@@ -11,6 +11,7 @@ from time import gmtime, strftime, time, sleep
 import datetime
 import csv
 import os
+import sys
 import pprint
 from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 from pyModbusTCP.client import ModbusClient as ModbusIPClient
@@ -223,3 +224,4 @@ for i in ip:
     csvManaging(ip[rownum],usr[rownum], pwd[rownum], rownum)
     rownum = rownum + 1 
     
+sys.stdout.flush()
