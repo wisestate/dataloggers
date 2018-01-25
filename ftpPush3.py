@@ -13,7 +13,7 @@ import csv
 import os
 import pprint
 from pymodbus.client.sync import ModbusSerialClient as ModbusClient
-from pyModbusTCP.client import ModbusIPClient
+from pyModbusTCP.client import ModbusClient as ModbusIPClient
 
 #Reads Value via Modbus RTU
 def readValue(id, reg):
@@ -34,7 +34,7 @@ def readValueIP(address, port, id, reg):
         c.close()
     if c.is_open():
         try:
-            value = c.read_holding_registers(id, reg)
+            value = c.read_holding_registers(int(id), reg)
         except Exception as e:
             raise e
         finally:
@@ -94,6 +94,44 @@ def csvManaging(ip, user, pwd, ftpServer):
         writer.writerows(lines)
 
 
+
+def valueManager()
+    rownum = 0
+    lastDevice = "Null"
+    high = 0
+    low = 0
+    scale = 1
+    linesToSkip = 0
+    for row in values:
+        if linesSkipped < linesToSkip :
+            linesSkipped += 1
+            continue
+        else:
+            linesSkipped = 0
+
+        device = row[0]
+        deviceType = row[1]
+        if deviceType == 0:
+            writeCSV(row[0], row[3], row[5], now)
+        elif deviceType == 1:
+            scale = row[5]
+            linesToSkip = 2
+            lowRow = values[rownum+1]
+            low = lowRow[5]
+            highRow = values[rownum+2]
+            high = highRow[5]
+            value = ((65536*high)+low)*10**(scale-6)
+            writeCSV(row[0], row[3], value, now)
+        elif deviceType == 10:
+            writeCSV(row[0], row[3], row[5], now)
+        else:
+            writeCSV(row[0], row[3], row[5], now)
+
+
+
+
+
+
 def storeFile(date):
     myFile = open('pendingFiles.csv', 'a', newline='')
     with myFile:
@@ -125,6 +163,7 @@ client = ModbusClient(method='rtu', port='/dev/ttyUSB0', timeout=1, stopbits = 1
 client.connect()
 pp = pprint.PrettyPrinter(indent=4)
 startime = time()
+values = []
 print("\n")
 now = datetime.datetime.utcnow()
 dateName = now.strftime("%Y-%m-%d-%H-%M-%S")
@@ -158,9 +197,9 @@ with open('config.csv') as csvfile:
                 #print(row)
             else:
                 #Read RTU
-                if row[0] < 10:
+                if int(row[1]) < 10:
                     value = readValue(row[4], row[5])
-                elif:
+                else:
                     value = readValueIP(row[2], row[3], row[4], row[5])
                 values.append([row[0], row[1], row[4], row[5], row[6], value])
             
@@ -169,7 +208,7 @@ with open('config.csv') as csvfile:
 
     pp.print(values)
 
-
+valueManager()
 storeFile(dateName)
 rownum = 0
 for i in ip:
